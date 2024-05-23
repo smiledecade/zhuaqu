@@ -51,7 +51,7 @@ def fetch_and_save_articles():
             continue
 
     # 保存结果
-    output_dir = "C:\Users\zhuaqu"
+    output_dir = r"C:\Users\zhuaqu"
     os.makedirs(output_dir, exist_ok=True)  # 创建目录，如果不存在则创建
     output_file = os.path.join(output_dir, 'articles.txt')
     
