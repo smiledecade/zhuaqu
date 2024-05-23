@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from lxml import etree
 import time
 import os
+import subprocess  # 用于打开文件
 
 def fetch_article_content(article_url):
     headers = {
@@ -56,6 +57,9 @@ def main():
     with open(output_file, 'w', encoding='utf-8') as f:
         for article in all_articles:
             f.write(f"Title: {article['title']}\nURL: {article['url']}\nContent:\n{article['content']}\n\n{'='*80}\n\n")
+
+    # 在保存完文件后打开文件
+    subprocess.Popen(['notepad', output_file])
 
 if __name__ == '__main__':
     main()
