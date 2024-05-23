@@ -61,5 +61,20 @@ def main():
     # 在保存完文件后打开文件
     subprocess.Popen(['notepad', output_file])
 
+    # 使用 Foxmail 发送邮件
+    recipient = "1292407020@qq.com"  # 你的邮箱地址
+    subject = "文章内容"  # 邮件主题
+    body = "请查收附件，文章内容见附件。"  # 邮件正文
+
+    # 使用 Foxmail 命令行发送邮件
+    foxmail_path = r"C:\Users\zhuaqu\Foxmail.exe"  # Foxmail 安装路径
+    attachment = output_file  # 附件路径
+
+    # 构建命令行参数
+    command = [foxmail_path, "-s", subject, "-b", body, "-a", attachment, recipient]
+    
+    # 执行命令
+    subprocess.Popen(command)
+
 if __name__ == '__main__':
     main()
