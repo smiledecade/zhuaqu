@@ -94,13 +94,13 @@ def main():
         current_time = datetime.datetime.now().time()
         print("当前时间：", current_time)
         # 检查当前时间是否在01:00至01:01之间
-        if datetime.time(19, 24) <= current_time <= datetime.time(19, 25):
+        if datetime.time(1, 0) <= current_time <= datetime.time(1, 1):
             # 获取最大文章ID
             end_id = fetch_max_article_id() 
 
             # 如果是第一次循环，则将 start_id 设置为 end_id - 10
             if start_id is None:
-                start_id = end_id - 10
+                start_id = 610448
 
             # 开始抓取文章
             base_url = 'https://www.qm120.com/zt/baike/{}.html'
