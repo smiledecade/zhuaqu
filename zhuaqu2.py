@@ -67,7 +67,7 @@ def main():
     body = "请查收附件，文章内容见附件。"  # 邮件正文
 
     # 使用 Foxmail 命令行发送邮件
-    foxmail_path = r"C:\Program Files\Foxmail\Foxmail.exe"  # Foxmail 安装路径
+    foxmail_path = r"C:\Users\zhuaqu\Foxmail.exe"  # Foxmail 安装路径
     attachment = output_file  # 附件路径
 
     # 构建命令行参数
