@@ -85,8 +85,8 @@ def send_email_with_attachment(subject, body, attachment_path, sender_email, sen
 
 def main():
     # 获取最大文章ID
-    end_id = fetch_max_article_id()
-    start_id = end_id - 1
+    end_id = fetch_max_article_id()-5
+    start_id = end_id - 10
 
     # 开始抓取文章
     base_url = 'https://www.qm120.com/zt/baike/{}.html'
