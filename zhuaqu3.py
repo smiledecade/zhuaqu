@@ -18,9 +18,14 @@ def fetch_max_article_id():
     soup = BeautifulSoup(response.content, 'html.parser')
 
     # 找到文章链接中的数字并取出最大值
-    article_ids = [int(a['href'].split('/')[-1].split('.')[0]) for a in soup.find_all('a', href=True) if a['href'].isdigit()]
-    max_id = max(article_ids) if article_ids else 0
+    article_ids = [int(a['href'].split('/')[-1].split('.')[0]) for a in soup.find_all('a', href=True) if a['href'].startswith('/zt/baike/') and a['href'].endswith('.html')]
+    if article_ids:
+        max_id = max(article_ids)
+    else:
+        max_id = None
+
     return max_id
+
 
 
 def fetch_article_content(article_url):
