@@ -4,6 +4,12 @@ from lxml import etree
 import time
 import os
 import subprocess  # 用于打开文件
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+import datetime
+import schedule
 
 def fetch_article_content(article_url):
     headers = {
@@ -28,6 +34,34 @@ def fetch_article_content(article_url):
     content = '\n'.join(content_elements).strip()
     
     return title, content
+
+def send_email_with_attachment(subject, body, attachment_path, sender_email, sender_password, receiver_email):
+    # 创建一个 MIMEMultipart 对象
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = subject
+
+    # 邮件正文
+    message.attach(MIMEText(body, 'plain'))
+
+    # 添加附件
+    filename = os.path.basename(attachment_path)
+    with open(attachment_path, "rb") as attachment:
+        part = MIMEApplication(attachment.read(), Name=filename)
+    part['Content-Disposition'] = f'attachment; filename="{filename}"'
+    message.attach(part)
+
+    # 连接到 SMTP 服务器
+    server = smtplib.SMTP_SSL('smtp.yourfoxmail.com', 465)
+    server.login(sender_email, sender_password)
+
+    # 发送邮件
+    server.sendmail(sender_email, receiver_email, message.as_string())
+    print("邮件发送成功！")
+
+    # 退出 SMTP 服务器连接
+    server.quit()
 
 def main():
     base_url = 'https://www.qm120.com/zt/baike/{}.html'
@@ -58,23 +92,25 @@ def main():
         for article in all_articles:
             f.write(f"Title: {article['title']}\nURL: {article['url']}\nContent:\n{article['content']}\n\n{'='*80}\n\n")
 
-    # 在保存完文件后打开文件
-    subprocess.Popen(['notepad', output_file])
-
     # 使用 Foxmail 发送邮件
     recipient = "1292407020@qq.com"  # 你的邮箱地址
     subject = "文章内容"  # 邮件主题
     body = "请查收附件，文章内容见附件。"  # 邮件正文
+    sender_email = "zhuaqu2024@163.com"  # 你的 Foxmail 邮箱地址
+    sender_password = "AGAKBGYUENUCQNCP"  # 你的 Foxmail 邮箱密码
+    attachment_path = output_file  # 附件路径
 
-    # 使用 Foxmail 命令行发送邮件
-    foxmail_path = r"C:\Users\zhuaqu\Foxmail.exe"  # Foxmail 安装路径
-    attachment = output_file  # 附件路径
+    # 发送邮件
+    send_email_with_attachment(subject, body, attachment_path, sender_email, sender_password, recipient)
 
-    # 构建命令行参数
-    command = [foxmail_path, "-s", subject, "-b", body, "-a", attachment, recipient]
-    
-    # 执行命令
-    subprocess.Popen(command)
+def run_job():
+    now = datetime.datetime.now()
+    if now.hour == 8 and now.minute == 0:
+        main()
 
-if __name__ == '__main__':
-    main()
+# 设置定时任务，每天的早上 8 点发送邮件
+schedule.every().day.at("04:50").do(run_job)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
