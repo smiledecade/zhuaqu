@@ -91,9 +91,8 @@ def main():
     start_id = None
     
     while True:
-        # 获取当前时间
         current_time = datetime.datetime.now().time()
-
+        print("当前时间：", current_time)
         # 检查当前时间是否在01:00至01:01之间
         if datetime.time(7, 18) <= current_time <= datetime.time(7, 19):
             # 获取最大文章ID
