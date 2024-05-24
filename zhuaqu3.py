@@ -34,7 +34,32 @@ def fetch_article_content(article_url):
     return title, content
 
 def send_email_with_attachment(subject, body, attachment_path, sender_email, sender_password, receiver_email):
-    # 略，与之前的 send_email_with_attachment 函数一致
+    # 创建一个 MIMEMultipart 对象
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = receiver_email
+    message['Subject'] = subject
+
+    # 邮件正文
+    message.attach(MIMEText(body, 'plain'))
+
+    # 添加附件
+    filename = os.path.basename(attachment_path)
+    with open(attachment_path, "rb") as attachment:
+        part = MIMEApplication(attachment.read(), Name=filename)
+    part['Content-Disposition'] = f'attachment; filename="{filename}"'
+    message.attach(part)
+
+    # 连接到 SMTP 服务器
+    server = smtplib.SMTP_SSL('smtp.163.com', 465)
+    server.login(sender_email, sender_password)
+
+    # 发送邮件
+    server.sendmail(sender_email, receiver_email, message.as_string())
+    print("邮件发送成功！")
+
+    # 退出 SMTP 服务器连接
+    server.quit()
 
 def main():
     # 获取最大文章ID
