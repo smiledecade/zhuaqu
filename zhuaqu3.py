@@ -89,47 +89,61 @@ def send_email_with_attachment(subject, body, attachment_path, sender_email, sen
     server.quit()
 
 def main():
-    # 获取最大文章ID
-    end_id = fetch_max_article_id() 
-    start_id = end_id - 1
-
-    # 开始抓取文章
-    base_url = 'https://www.qm120.com/zt/baike/{}.html'
-    all_articles = []
-
-    for article_id in range(start_id, end_id + 1):
-        article_url = base_url.format(article_id)
-        try:
-            title, content = fetch_article_content(article_url)
-            if title and content:
-                all_articles.append({'title': title, 'url': article_url, 'content': content})
-                print(f'Successfully fetched: {title}')
-            else:
-                print(f'No content found for {article_url}')
-            time.sleep(1)  # 适当的延迟，避免被封禁
-        except Exception as e:
-            print(f'Error fetching {article_url}: {e}')
-            continue
-
-    # 保存结果
-    output_dir = r"C:\Users\zhuaqu"
-    os.makedirs(output_dir, exist_ok=True)  # 创建目录，如果不存在则创建
-    output_file = os.path.join(output_dir, 'articles.txt')
+    # 初始时将 start_id 设置为 None
+    start_id = None
     
-    with open(output_file, 'w', encoding='utf-8') as f:
-        for article in all_articles:
-            f.write(f"Title: {article['title']}\nURL: {article['url']}\nContent:\n{article['content']}\n\n{'='*80}\n\n")
+    while True:
+        # 获取最大文章ID
+        end_id = fetch_max_article_id() 
 
-    # 使用 Foxmail 发送邮件
-    recipient = "1292407020@qq.com"  # 你的邮箱地址
-    subject = "文章内容"  # 邮件主题
-    body = "请查收附件，文章内容见附件。"  # 邮件正文
-    sender_email = "zhuaqu2024@163.com"  # 你的 Foxmail 邮箱地址
-    sender_password = "AGAKBGYUENUCQNCP"  # 你的 Foxmail 邮箱密码
-    attachment_path = output_file  # 附件路径
+        # 如果是第一次循环，则将 start_id 设置为 end_id - 1
+        if start_id is None:
+            start_id = end_id - 10
 
-    # 发送邮件
-    send_email_with_attachment(subject, body, attachment_path, sender_email, sender_password, recipient)
+        # 开始抓取文章
+        base_url = 'https://www.qm120.com/zt/baike/{}.html'
+        all_articles = []
+
+        for article_id in range(start_id, end_id + 1):
+            article_url = base_url.format(article_id)
+            try:
+                title, content = fetch_article_content(article_url)
+                if title and content:
+                    all_articles.append({'title': title, 'url': article_url, 'content': content})
+                    print(f'Successfully fetched: {title}')
+                else:
+                    print(f'No content found for {article_url}')
+                time.sleep(1)  # 适当的延迟，避免被封禁
+            except Exception as e:
+                print(f'Error fetching {article_url}: {e}')
+                continue
+
+        # 更新 start_id 为本次循环的 end_id
+        start_id = end_id
+
+        # 保存结果
+        output_dir = r"C:\Users\zhuaqu"
+        os.makedirs(output_dir, exist_ok=True)  # 创建目录，如果不存在则创建
+        output_file = os.path.join(output_dir, 'articles.txt')
+        
+        with open(output_file, 'w', encoding='utf-8') as f:
+            for article in all_articles:
+                f.write(f"Title: {article['title']}\nURL: {article['url']}\nContent:\n{article['content']}\n\n{'='*80}\n\n")
+
+        # 使用 Foxmail 发送邮件
+        recipient = "1292407020@qq.com"  # 你的邮箱地址
+        subject = "文章内容"  # 邮件主题
+        body = "请查收附件，文章内容见附件。"  # 邮件正文
+        sender_email = "zhuaqu2024@163.com"  # 你的 Foxmail 邮箱地址
+        sender_password = "AGAKBGYUENUCQNCP"  # 你的 Foxmail 邮箱密码
+        attachment_path = output_file  # 附件路径
+
+        # 发送邮件
+        send_email_with_attachment(subject, body, attachment_path, sender_email, sender_password, recipient)
+
+        # 等待一段时间后再次执行循环
+        time.sleep(30)  # 暂定为每 5 秒执行一次循环
+
 
 if __name__ == "__main__":
     main()
