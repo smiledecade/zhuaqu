@@ -118,8 +118,7 @@ def main():
                 print(f'Error fetching {article_url}: {e}')
                 continue
 
-        # 更新 start_id 为本次循环的 end_id
-        start_id = end_id + 1
+
 
         # 保存结果
         output_dir = r"C:\Users\zhuaqu"
@@ -143,7 +142,8 @@ def main():
 
         # 等待一段时间后再次执行循环
         time.sleep(30)  # 暂定为每 5 秒执行一次循环
-
+        # 更新 start_id 为本次循环的 end_id
+        start_id = end_id + 1
 
 if __name__ == "__main__":
     main()
