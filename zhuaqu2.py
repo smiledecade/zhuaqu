@@ -103,14 +103,5 @@ def main():
     # 发送邮件
     send_email_with_attachment(subject, body, attachment_path, sender_email, sender_password, recipient)
 
-def run_job():
-    now = datetime.datetime.now()
-    if now.hour == 8 and now.minute == 0:
-        main()
-
-# 设置定时任务，每天的早上 8 点发送邮件
-schedule.every().day.at("04:50").do(run_job)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+if __name__ == '__main__':
+    main()
