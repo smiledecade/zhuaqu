@@ -53,7 +53,7 @@ def send_email_with_attachment(subject, body, attachment_path, sender_email, sen
     message.attach(part)
 
     # 连接到 SMTP 服务器
-    server = smtplib.SMTP_SSL('smtp.yourfoxmail.com', 465)
+    server = smtplib.SMTP_SSL('smtp.163.com', 465)
     server.login(sender_email, sender_password)
 
     # 发送邮件
