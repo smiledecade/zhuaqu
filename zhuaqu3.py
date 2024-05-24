@@ -96,7 +96,7 @@ def main():
         # 获取最大文章ID
         end_id = fetch_max_article_id() 
 
-        # 如果是第一次循环，则将 start_id 设置为 end_id - 1
+        # 如果是第一次循环，则将 start_id 设置为 end_id - 10
         if start_id is None:
             start_id = end_id - 10
 
@@ -119,12 +119,12 @@ def main():
                 continue
 
         # 更新 start_id 为本次循环的 end_id
-        start_id = end_id
+        start_id = end_id + 1
 
         # 保存结果
         output_dir = r"C:\Users\zhuaqu"
         os.makedirs(output_dir, exist_ok=True)  # 创建目录，如果不存在则创建
-        output_file = os.path.join(output_dir, 'articles.txt')
+        output_file = os.path.join(output_dir, f'articles_{start_id}-{end_id}.txt')
         
         with open(output_file, 'w', encoding='utf-8') as f:
             for article in all_articles:
