@@ -95,7 +95,7 @@ def main():
         current_time = datetime.datetime.now().time()
 
         # 检查当前时间是否在01:00至01:01之间
-        if datetime.time(7, 15) <= current_time <= datetime.time(7, 16):
+        if datetime.time(7, 18) <= current_time <= datetime.time(7, 19):
             # 获取最大文章ID
             end_id = fetch_max_article_id() 
 
