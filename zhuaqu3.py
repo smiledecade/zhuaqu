@@ -44,16 +44,21 @@ def fetch_article_content(article_url):
     
     # 解析网页内容
     soup = BeautifulSoup(response.content, 'html.parser')
+    dom = etree.HTML(str(soup))
     
     # 获取标题
-    title_tag = soup.find('h1', class_='title')
-    title = title_tag.get_text() if title_tag else None
-
+    title = dom.xpath('/html/body/div[4]/div[1]/div[2]/div[1]/h1/text()')
+    if title:
+        title = title[0]
+    else:
+        return None, None
+    
     # 获取正文内容
-    content_tag = soup.find('div', class_='content')
-    content = content_tag.get_text() if content_tag else None
-
+    content_elements = dom.xpath('/html/body/div[4]/div[1]/div[2]/div[2]//text()')
+    content = '\n'.join(content_elements).strip()
+    
     return title, content
+
 
 def send_email_with_attachment(subject, body, attachment_path, sender_email, sender_password, receiver_email):
     # 创建一个 MIMEMultipart 对象
