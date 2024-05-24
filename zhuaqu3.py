@@ -1,7 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
+from lxml import etree
 import time
 import os
+import subprocess  # 用于打开文件
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+import datetime
+import schedule
 
 def fetch_max_article_id():
     # 打开网页并获取内容
