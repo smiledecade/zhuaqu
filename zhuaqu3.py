@@ -10,8 +10,10 @@ def fetch_max_article_id():
     soup = BeautifulSoup(response.content, 'html.parser')
 
     # 找到文章链接中的数字并取出最大值
-    max_id = max(int(a['href'].split('/')[-1].split('.')[0]) for a in soup.find_all('a', href=True))
+    article_ids = [int(a['href'].split('/')[-1].split('.')[0]) for a in soup.find_all('a', href=True) if a['href'].isdigit()]
+    max_id = max(article_ids) if article_ids else 0
     return max_id
+
 
 def fetch_article_content(article_url):
     headers = {
