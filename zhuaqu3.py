@@ -98,7 +98,7 @@ def main():
 
         # 如果是第一次循环，则将 start_id 设置为 end_id - 10
         if start_id is None:
-            start_id = end_id - 10
+            start_id = end_id - 1800
 
         # 开始抓取文章
         base_url = 'https://www.qm120.com/zt/baike/{}.html'
